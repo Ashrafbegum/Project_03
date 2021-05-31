@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/header') %>
+
+    <body>
+        <h2>Schedules for user id: <%= userId %></h2>  
+        <% if(isUserIdValid) {
+            if(schedules.length < 1) { %>
+                <p>No schedules found.</p>
+            <% } else {
+                let output = []
+                schedules.forEach((sch) => { 
+                       if(sch.user_id == userId) {
+                            output.push(sch)
+                       }
+               })
+
+               if(output.length > 0) { %>
+                    <table>
+                        <tr>
+                            <th>User_ID</th>
+                            <th>Day</th>
+                            <th>Start_At</th>
+                            <th>End_At</th>
+                        </tr>    
+
+                        <% output.forEach((sch) => { %>
+                            <tr>
+                                <td><%= sch.user_id %></td>
+                                <td><%= sch.day %></td>
+                                <td><%= sch.start_at %></td>
+                                <td><%= sch.end_at %></td>
+                              </tr>
+                        <%  }) %>
+                    </table>  
+
+                <% } else { %>
+                    <p>No schedules found for the user id: <%= userId %> </p>
+                <% } 
+                }
+        } else { %>
+            <p>Please enter a number for the user id.</p>
+        <% } %>
+
+    </body>
+
+    <%- include('../includes/footer') %>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/header') %>
+
+    <body>
+        <h2>Schedules Details</h2>   
+
+        <% if(schedules.length < 1) { %>   <!--Get schedules data from index.js page through /schedules route-->
+           <p>No schedules found</p>
+           <% } else { %>    
+                 <table>
+                    <tr>
+                        <th>User_ID</th>
+                        <th>Day</th>
+                        <th>Start_At</th>
+                        <th>End_At</th>
+                      </tr>    
+                    
+                    <% schedules.forEach((sch) => { %>
+                        <tr>
+                            <td><%= sch.user_id %></td>
+                            <td><%= sch.day %></td>
+                            <td><%= sch.start_at %></td>
+                            <td><%= sch.end_at %></td>
+                          </tr>
+                    <%  }) %>
+                 </table>
+
+            <%  }  %> 
+
+    </body>
+
+    <%- include('../includes/footer') %>
+
+</html>

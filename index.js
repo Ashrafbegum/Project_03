@@ -5,57 +5,45 @@ const data = require('./data.js')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
+app.use(express.static('public'))
+
+// Used for post requests to parse the body
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
+//Set view engine
+app.set('view engine',  'ejs')
 
 app.get('/', (req, res) => {
-  res.send('Welcome to our schedule website')
-  console.log(data) // Prints entire data
+  res.render('pages/index', {   //specifying .ejs extension is optional, it understand automatically
+    welcomeMessage: 'Welcome to our schedule website'
+  })
 })
 
 app.get('/users', (req, res) => {
   console.log(data.users)
-  res.send(data.users)
+  res.render('pages/users', {users: data.users}) //Pass users' details in the variable "users" to "users.ejs" page
 })
 
 app.get('/schedules', (req, res) => {
   console.log(data.schedules)
-  res.send(data.schedules )
+  res.render('pages/schedules', {schedules: data.schedules}) //Pass schedules' details in the variable "schedules" to "schedules.ejs" page
 })
 
 app.get('/users/:id', (req, res) => {
-  if(req.params.id> data.users.length)
-  res.send('id is not valid')
-  res.send(data.users[req.params.id])
+  res.render('pages/singleUser', {
+    userId: req.params.id,
+    isUserIdValid: isIdValid(req.params.id),
+    users: data.users })
 })
 
 app.get('/users/:id/schedules', (req, res) => { 
-    var id = Number(req.params.id) 
-  
-    // NaN() returns true if input is not a number - typeof() returns the string number
-    if(typeof id === 'number' && !isNaN(id)) {   
-      var output = []
-      var j=0
-  
-      for(var i=0; i< data.schedules.length; i++) {
-        if(data.schedules[i].user_id == id ) {
-          output.push(
-            data.schedules[i])
-          j++
-        }
-      }     
-
-      if(output.length > 0) 
-         res.send(output)
-      else
-         res.send('Schedules not found for the id:' + req.params.id)   
-       
-    }
-      else 
-        res.send("Please enter a number for the user id.")
+   res.render('pages/userSchedules', {
+      userId: req.params.id,
+      isUserIdValid: isIdValid(req.params.id),
+      schedules: data.schedules })
 })
-      
+    
 app.post('/users', (req, res) => {
      const pwd = req.body.password
      bcrypt.hash(pwd, saltRounds, (err,hash) => {
@@ -66,14 +54,24 @@ app.post('/users', (req, res) => {
 })
 
 app.post('/schedules', (req, res) => {
-  data.schedules.push(req.body)
-  console.log(data.schedules)
-  res.send(req.body)
+  
+  // data.schedules.push(req.body)
+  // console.log(data.schedules)
+  // res.send(req.body)
 })
 
 app.get('/users/:id/schedules/:schId', (req, res) => {
   res.send(req.params) //It returns output in key:value format eg., id:0, schId:0
 })
+
+function isIdValid(userId) {
+  var id = Number(userId) 
+  
+  // NaN() returns true if input is not a number - typeof() returns the string number
+  if (typeof id === 'number' && !isNaN(id)) 
+      return true;
+  return false
+}
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

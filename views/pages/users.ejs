@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/header') %>
+
+    <body>
+        <h2>User Details</h2>   
+
+        <% if(users.length < 1) { %>   <!--Get users data from index.js page through /users route-->
+           <p>No users found</p>
+           <% } else { %>    
+                 <table>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                      </tr>    
+                    
+                    <% users.forEach((user) => { %>
+                        <tr>
+                            <td><%= user.firstname %></td>
+                            <td><%= user.lastname %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.password %></td>
+                          </tr>
+                    <%  }) %>
+                 </table>
+
+            <%  }  %> 
+
+    </body>
+
+    <%- include('../includes/footer') %>
+
+</html>

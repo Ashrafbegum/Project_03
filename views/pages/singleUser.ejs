@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/header') %>
+
+    <body>
+        <h2>User Details</h2>  
+        <% if(isUserIdValid) { %>   
+            <% if(users.length < 1) { %>   
+                <p>No users found</p>
+            <% } else if(userId >= users.length) { %>
+                    <p>User id <%= userId %> does not exist.</p>
+            <% } else { %>
+                    <div>
+                        <p><strong>Firstname: </strong> <%= users[userId].firstname %></p>
+                        <p><strong>Lastname: </strong> <%= users[userId].lastname %></p>
+                        <p><strong>Email: </strong> <%= users[userId].email %></p>
+                        <p><strong>Password: </strong> <%= users[userId].password %> </p>
+                    </div>                                
+                <%  } %>
+        <% } else { %>
+            <p>Please enter a number for the user id.</p>
+        <% } %>
+    </body>
+
+    <%- include('../includes/footer') %>
+
+</html>
