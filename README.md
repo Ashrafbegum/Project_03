@@ -1,6 +1,6 @@
 # Project_03
 It is a Mr. Coffee Schedule App Management System.
-This projects is developed in three versions: Projct3A, Project3B and Project3C
+This projects is developed in three versions: Projct3A, Project3B and Project3C.
 Each version is an improvement over the previous version.
 This is the Project3A version.
 It stores the hardcoded data in a file.
