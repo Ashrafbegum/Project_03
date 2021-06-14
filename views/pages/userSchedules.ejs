@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%- include('../includes/header') %>
+    <%- include('../includes/head') %>
 
     <body>
-        <h2>Schedules for user id: <%= userId %></h2>  
+        <%- include('../includes/header') %>
+
+        <h1>Schedules for user id: <%= userId %></h1>  
         <% if(isUserIdValid) {
             if(schedules.length < 1) { %>
                 <p>No schedules found.</p>
@@ -16,7 +18,7 @@
                })
 
                if(output.length > 0) { %>
-                    <table>
+                    <table class="styled-table">
                         <tr>
                             <th>User_ID</th>
                             <th>Day</th>
@@ -42,8 +44,8 @@
             <p>Please enter a number for the user id.</p>
         <% } %>
 
-    </body>
+        <%- include('../includes/footer') %>
 
-    <%- include('../includes/footer') %>
+    </body>
 
 </html>

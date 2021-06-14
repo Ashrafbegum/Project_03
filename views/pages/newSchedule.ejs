@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/head') %>
+
+    <body>
+        <%- include('../includes/header') %>
+
+        <main>
+            <h1>Enter schedules for the user</h1>   
+
+            <form novaidate class="contact-form" id="scheduleForm" method="POST" action="/schedules">
+
+                <% if(users.length < 1) { %>   <!--Get schedules data from index.js page through /schedules route-->
+                    <p>No users found</p>
+                    <% } else {
+                           let i=0 %> 
+                           <div class="field">
+                                <label for="user_id">User ID *</label>
+                                <select id="user_id" name="user_id" required >
+                                            <option value="">Select name</option>
+                                <% users.forEach((user) => { %>
+                                            <option value= <%= i %>><%= user.firstname + " " + user.lastname %></option>
+                                            <% i++ %>
+                                <% }) %>
+                                </select>
+                                <div class="error" id="userIdErr"></div>
+                            </div>      
+                            <% } %>
+    
+                <div class="field">
+                    <label for="day">Day *</label>
+                    <select id="day" name="day" required >
+                        <% let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %>
+                        <option value="">Select Day</option>
+                        <% for (let i=0; i<days.length; i++) { %>
+                            <option value= "<%= i+1 %>"> <%= days[i] %></option>
+                        <% } %>                      
+                    </select>
+                    <div class="error" id="dayErr"></div>
+                </div>
+    
+                <div class="timeGroup">
+                    <div>
+                        <label for="start_at">Start At</label>
+                        <select id="start_at" name="start_at" required >
+                            <option value="">--Select--</option>
+                            <% for (let i=1; i<=12; i++) { %>
+                                 <option value = "<%= i %>" > <%= i %> </option>
+                           <% } %>                      
+                        </select>
+                        <div class="error" id="startAtErr"></div>
+                    </div>
+
+                    <div class="time-inline">
+                        <label for="startAM">AM</label>
+                        <input type="radio" id="startAM" name="startGroup" value="AM">
+    
+                        <label for="startPM">PM</label>
+                        <input type="radio" id="startPM" name="startGroup" value="PM">
+    
+                        <div class="error" id="startTimeErr"></div>
+                    </div>
+                </div>
+
+                <div class="timeGroup">
+                   <div> 
+                         <label for="end_at">End At</label>
+                         <select id="end_at" name="end_at" required >
+                            <option value="">--Select--</option>
+                            <% for (let i=1; i<=12; i++) { %>
+                                 <option value= <%= i %>><%= i %></option>
+                           <% } %>
+                         </select>
+                         <div class="error" id="endAtErr"></div>
+                    </div>
+                     
+                    <div class="time-inline">
+                        <label for="endAM">AM</label>
+                        <input type="radio" id="endAM" name="endGroup" value="AM">
+    
+                        <label for="endPM">PM</label>
+                        <input type="radio" id="endPM" name="endGroup" value="PM">
+    
+                        <div class="error" id="endTimeErr"></div>
+                    </div>
+                </div>
+    
+                <div class="center-button">
+                    <button class="btn" id="scheduleButton" type="submit">Submit</button>
+                </div>
+            </form>
+        </main>
+
+        <%- include('../includes/footer') %>
+
+         <script type="text/javascript" src="../js/scheduleFormValidation.js" defer ></script>
+     </body>
+
+</html>
