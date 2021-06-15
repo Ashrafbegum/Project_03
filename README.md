@@ -7,4 +7,3 @@ It stores the hardcoded data in a file.
 It is developed on Visual Studio Code with Express Framework.
 Nodemon tool is used to run the website.
 It creates routes to get and post the data to the server.
-Currently working on the Project3B and Project3C.
