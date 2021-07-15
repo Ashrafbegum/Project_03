@@ -17,7 +17,6 @@
                           <th>Firstname</th>
                           <th>Lastname</th>
                           <th>Email</th>
-                          <th>Password</th>
                         </tr>    
                       
                       <% users.forEach((user) => { %>
@@ -26,7 +25,6 @@
                               <td><%= user.firstname %></td>
                               <td><%= user.lastname %></td>
                               <td><%= user.email %></td>
-                              <td><%= user.password %></td>
                             </tr>
                       <%  }) %>
                    </table>

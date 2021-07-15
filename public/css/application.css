@@ -9,6 +9,8 @@
 main { 
   padding-left: 5%;
   padding-right: 5%; 
+  /* min-height: calc(100vh - headerheight - footerheight); */
+  min-height: calc(100vh - 10vh - 150px);
 }
 
 header{

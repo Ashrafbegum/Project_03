@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     scheduleForm.onsubmit = (e) => { 
         if (validateUserId(user_id) && validateDay(day) && validateTimings(start_time, end_time)) {
              console.log("Form validation is successful")
-            e.preventDefault()
         } else {
             console.log("Error while validating the form.")
             e.preventDefault()

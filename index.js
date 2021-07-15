@@ -5,7 +5,7 @@ const app = express()
 //set PGPASSWORD=sunwitpetchoo&& psql -U postgres -h localhost -d mrcoffee -f sql/create_schedules.sql
 
 // Server listening at this port
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 
 //postgres setup
 const db = require('./database')
@@ -36,7 +36,8 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
   db.any('SELECT * FROM users;')
-  .then((result) => {
+  .then((result) => { 
+    console.log("users: " + result[0].firstname)
       res.render('pages/users', {
           documentTitle: 'Users',
           users: result
