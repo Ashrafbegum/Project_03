@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/head') %>
+
+    <body>
+        <%- include('../includes/header') %>
+
+        <main>
+            <h1>Enter schedules for the user</h1>   
+
+            <form novaidate id="scheduleForm" method="post" action="/schedules/new" >
+
+                <% if(users.length < 1) { %>   <!--Get schedules data from index.js page through /schedules route-->
+                    <p>No users found</p>
+                    <% } else {
+                           let i=0 %> 
+                           <div>
+                                <label for="user_id">User Name *</label>
+                                <select id="user_id" name="user_id" required >
+                                            <option value="">Select name</option>
+                                <% users.forEach((user) => { 
+                                    let user_name = user.firstname + " " + user.lastname %>
+                                            <option value= "<%= user.user_id %>"> <%= user_name %> </option>
+                                            <% i++ %>
+                                <% }) %>
+                                </select>
+                                <div class="error" id="userIdErr"></div>
+                            </div>      
+                            <% } %>
+    
+                <div>
+                    <label for="day">Day *</label>
+                    <select id="day" name="day" required >
+                        <% let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %>
+                        <option value="">Select Day</option>
+                        <% for (let i=0; i<days.length; i++) { %>
+                            <option value= "<%= i+1 %>"> <%= days[i] %></option>
+                        <% } %>                      
+                    </select>
+                    <div class="error" id="dayErr"></div>
+                </div>
+    
+                <div>         
+                    <label for="start_time">Start Time *</label>                   
+                    <input id="start_time" type="time" name="start_time" value="00:00:00">
+                    <div class="error" id="startTimeErr"></div>
+                </div>
+                <div>        
+                    <label for="end_time">End Time *</label>
+                    <input id="end_time" type="time" name="end_time" value="00:00:00">
+                    <div class="error" id="endTimeErr"></div>
+                </div>                   
+    
+                <div class="center-button">
+                    <button class="btn" id="scheduleButton" type="submit">Submit</button>
+                </div>
+            </form>
+        </main>
+
+        <%- include('../includes/footer') %>
+
+         <script type="text/javascript" src="../js/scheduleFormValidation.js" defer ></script>
+     </body>
+
+</html>
+

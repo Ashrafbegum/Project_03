@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../includes/head') %>
+
+    <body>
+        <%- include('../includes/header') %>
+
+        <main>
+            <h1>Enter user details</h1>   
+
+            <form novaidate id="userForm" method="POST" action="/users/new">
+    
+                <div>
+                    <label>First Name *</label>
+                    <input id="firstname" type="text" name="firstname" required />
+                    <div class="error" id="firstNameErr"></div>
+                </div>
+    
+                <div>
+                    <label for="lastname">Last Name *</label>
+                    <input id="lastname" type="text" name="lastname" required />
+                    <div class="error" id="lastNameErr"></div>
+                </div>
+    
+                <div>
+                    <label>Email *</label>
+                    <input id="email" type="text" name="email" required />
+                    <div class="error" id="emailErr"></div>
+                </div>
+                
+                <div>
+                    <label>Password *</label> 
+                    <input id="password" type="password" name="password" required />
+                    <div class="error" id="pwdErr"></div>
+                </div>
+    
+                <div class="center-button">
+                    <button class="btn" id="userButton" type="submit">Submit</button>
+                </div>
+            </form>
+        </main>
+        
+        <%- include('../includes/footer') %>
+        <script type="text/javascript" src="../js/userFormValidation.js" defer ></script>
+
+    </body>
+
+</html>

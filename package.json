@@ -4,6 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "create-database": "psql -U postgres -h localhost -f sql/create_database.sql",
+    "create-table-users": "psql  -U postgres -h localhost -d mrcoffee -f sql/create_users.sql",
+    "create-table-schedules": "psql  -U postgres -h localhost -d mrcoffee -f sql/create_schedules.sql",
+    "seed-table-users": "psql  -U postgres  -h localhost -d mrcoffee -f sql/seed_users.sql", 
+    "seed-table-schedules": "psql  -U postgres  -h localhost -d mrcoffee -f sql/seed_schedules.sql", 
+    "create-view-schedules": "psql  -U postgres -h localhost -d mrcoffee -f sql/create_schedulesView.sql",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,5 +22,8 @@
     "express": "^4.17.1",
     "pg": "^8.6.0",
     "pg-promise": "^10.10.2"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }

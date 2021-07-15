@@ -1,78 +1,137 @@
+//express setup
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 3000
+
+//set PGPASSWORD=sunwitpetchoo&& psql -U postgres -h localhost -d mrcoffee -f sql/create_schedules.sql
+
+// Server listening at this port
+const port = process.env.PORT || 3001
+
+//postgres setup
+const db = require('./database')
+
+//access to data.js file
 const data = require('./data.js')
+
+//bcrypt setup for encrypting password
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
+// Set public folder as the current working directory
+app.use(express.static('public'))
+
+// Used for post requests to parse the body
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
+//Set view engine
+app.set('view engine',  'ejs')
 
+//Show the homepage
 app.get('/', (req, res) => {
-  res.send('Welcome to our schedule website')
-  console.log(data) // Prints entire data
+  res.render('pages/index', {
+    documentTitle: 'Homepage'
+  })
 })
 
 app.get('/users', (req, res) => {
-  console.log(data.users)
-  res.send(data.users)
+  db.any('SELECT * FROM users;')
+  .then((result) => { 
+    console.log("users: " + result[0].firstname)
+      res.render('pages/users', {
+          documentTitle: 'Users',
+          users: result
+      })
+  })
+  .catch((err) => {
+      res.send(err.message)  
+  })
 })
 
+// Displays the page to add a new user
+app.get('/users/new', (req, res) => {        
+  res.render('pages/newUser', {
+    documentTitle: 'New User',
+  })
+})
+app.post('/users/new', (req, res) => {
+  const pwd = req.body.password
+  const hash = bcrypt.hashSync(pwd, saltRounds); //Synchronous version of bcrypt()
+
+  req.body.password = hash   //set the password to encrypted password
+
+  db.none('INSERT INTO users (firstname, lastname, email, password) VALUES ($1, $2, $3, $4);', 
+     [req.body.firstname, req.body.lastname, req.body.email, req.body.password])
+  .then(() => {
+      //  res.redirect('back') //Goes to the previous page
+   res.redirect('/users')
+   })
+  .catch((err) => {
+         res.send(err.message)  
+ })  
+})
+
+//Display all existing schedules
 app.get('/schedules', (req, res) => {
-  console.log(data.schedules)
-  res.send(data.schedules )
+  db.any('SELECT * FROM schedules;')
+  .then((result) => {
+   // console.log(result)
+    res.render('pages/schedules', {
+      documentTitle: 'Schedules',
+      schedules: result
+    })
+  })
+  .catch((err) => {
+    res.send(err.message)
+  })
 })
 
-app.get('/users/:id', (req, res) => {
-  if(req.params.id> data.users.length)
-  res.send('id is not valid')
-  res.send(data.users[req.params.id])
+// Display a form to add a new schedule
+app.get('/schedules/new', (req, res) => {     
+  db.any('SELECT user_id, firstname, lastname FROM users ORDER BY firstname;')
+  .then((result) => {   
+      res.render('pages/newSchedule', {
+        documentTitle: 'New Schedule',
+        users: result
+      })
+  })
+  .catch((err) => {
+    res.send(err.message)
+  })
 })
 
-app.get('/users/:id/schedules', (req, res) => { 
-    var id = Number(req.params.id) 
-  
-    // NaN() returns true if input is not a number - typeof() returns the string number
-    if(typeof id === 'number' && !isNaN(id)) {   
-      var output = []
-      var j=0
-  
-      for(var i=0; i< data.schedules.length; i++) {
-        if(data.schedules[i].user_id == id ) {
-          output.push(
-            data.schedules[i])
-          j++
-        }
-      }     
-
-      if(output.length > 0) 
-         res.send(output)
-      else
-         res.send('Schedules not found for the id:' + req.params.id)   
-       
-    }
-      else 
-        res.send("Please enter a number for the user id.")
-})
-      
-app.post('/users', (req, res) => {
-     const pwd = req.body.password
-     bcrypt.hash(pwd, saltRounds, (err,hash) => {
-       req.body.password = hash   //set the password to encrypted password
-       data.users.push(req.body)
-     })
-     res.send(req.body)
+//Save schedule to the database
+app.post('/schedules/new', (req, res) => {
+  req.body.user_id = Number(req.body.user_id)
+  req.body.day = Number(req.body.day)
+  db.none('INSERT INTO schedules (user_id, day, start_time, end_time) VALUES ($1, $2, $3, $4);', 
+      [req.body.user_id, req.body.day, req.body.start_time, req.body.end_time])
+  .then(() => {
+    //  res.redirect('back') //Goes to the previous page
+    res.redirect('/schedules')
+  })
+  .catch((err) => {
+      res.send(err.message)  
+  })    
 })
 
-app.post('/schedules', (req, res) => {
-  data.schedules.push(req.body)
-  console.log(data.schedules)
-  res.send(req.body)
-})
+//this view displays all the existing schedules
+app.get('/view-schedules', (req,res) => {
+ const space =' '
+   db.any('SELECT UPPER(CONCAT(firstname, $1, lastname)) AS name, day, start_time, end_time FROM schedules_view;',[
+     space
+   ])
 
-app.get('/users/:id/schedules/:schId', (req, res) => {
-  res.send(req.params) //It returns output in key:value format eg., id:0, schId:0
+  .then((result) => {
+    console.log(result)
+    res.render('pages/view_schedules', {
+      documentTitle: 'View For Schedules',
+      schedules: result
+    })
+  })
+  .catch((err) => {
+    res.send(err.message)
+  })
 })
 
 app.listen(port, () => {
